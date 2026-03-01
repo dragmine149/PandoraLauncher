@@ -1,11 +1,11 @@
-use std::{io::{BufRead, Read, Seek, SeekFrom, Write}, path::Path, sync::{atomic::Ordering, Arc}, time::{Duration, SystemTime}};
+use std::{io::{BufRead, Read}, sync::Arc, time::{Duration, SystemTime}};
 
 use auth::{credentials::AccountCredentials, models::{MinecraftAccessToken, MinecraftProfileResponse}, secret::PlatformSecretStorage};
 use bridge::{
     install::{ContentDownload, ContentInstall, ContentInstallFile, InstallTarget}, instance::{InstanceStatus, ContentType, ContentSummary}, message::{BackendConfigWithPassword, LogFiles, MessageToBackend, MessageToFrontend}, meta::MetadataResult, modal_action::{ModalAction, ModalActionVisitUrl, ProgressTracker, ProgressTrackerFinishType}, serial::AtomicOptionSerial
 };
 use futures::TryFutureExt;
-use rustc_hash::{FxHashMap, FxHashSet};
+use rustc_hash::FxHashSet;
 use schema::{auxiliary::AuxiliaryContentMeta, content::ContentSource, modrinth::ModrinthLoader, version::{LaunchArgument, LaunchArgumentValue}};
 use serde::Deserialize;
 use strum::IntoEnumIterator;
@@ -13,7 +13,7 @@ use tokio::{io::AsyncBufReadExt, sync::Semaphore};
 use ustr::Ustr;
 
 use crate::{
-    BackendState, LoginError, account::{BackendAccount, MinecraftLoginInfo}, arcfactory::ArcStrFactory, instance::ContentFolder, launch::{ArgumentExpansionKey, LaunchError}, log_reader, metadata::{items::{AssetsIndexMetadataItem, FabricLoaderManifestMetadataItem, ForgeInstallerMavenMetadataItem, MinecraftVersionManifestMetadataItem, MinecraftVersionMetadataItem, ModrinthProjectVersionsMetadataItem, ModrinthSearchMetadataItem, ModrinthV3VersionUpdateMetadataItem, ModrinthVersionUpdateMetadataItem, MojangJavaRuntimeComponentMetadataItem, MojangJavaRuntimesMetadataItem, NeoforgeInstallerMavenMetadataItem, VersionUpdateParameters, VersionV3LoaderFields, VersionV3UpdateParameters}, manager::MetaLoadError}, mod_metadata::{ContentUpdateAction, ContentUpdateKey}
+    BackendState, LoginError, account::BackendAccount, arcfactory::ArcStrFactory, instance::ContentFolder, launch::{ArgumentExpansionKey, LaunchError}, log_reader, metadata::{items::{AssetsIndexMetadataItem, FabricLoaderManifestMetadataItem, ForgeInstallerMavenMetadataItem, MinecraftVersionManifestMetadataItem, MinecraftVersionMetadataItem, ModrinthProjectVersionsMetadataItem, ModrinthSearchMetadataItem, ModrinthV3VersionUpdateMetadataItem, ModrinthVersionUpdateMetadataItem, MojangJavaRuntimeComponentMetadataItem, MojangJavaRuntimesMetadataItem, NeoforgeInstallerMavenMetadataItem, VersionUpdateParameters, VersionV3LoaderFields, VersionV3UpdateParameters}, manager::MetaLoadError}, mod_metadata::{ContentUpdateAction, ContentUpdateKey}
 };
 
 impl BackendState {
@@ -1454,40 +1454,6 @@ impl BackendState {
 
         println!("Done downloading all metadata");
     }
-}
-
-fn set_mod_child_enabled(child_state_path: &Path, child: &str, enabled: bool) -> std::io::Result<()> {
-    let mut file = std::fs::OpenOptions::new()
-        .create(true)
-        .write(true)
-        .read(true)
-        .open(child_state_path)?;
-
-    let _ = file.lock();
-
-    let mut string = String::new();
-    file.read_to_string(&mut string)?;
-
-    if !string.ends_with('\n') {
-        string.push('\n');
-    }
-
-    let line = format!("{}\n", child);
-    let was_enabled = string.find(&line);
-
-    if was_enabled.is_none() != enabled {
-        if !enabled {
-            string.push_str(&line);
-        } else {
-            let from = was_enabled.unwrap();
-            string.replace_range(from..from+line.len() , "");
-        }
-        file.set_len(0)?;
-        file.seek(SeekFrom::Start(0))?;
-        file.write_all(string.as_bytes())?;
-    }
-
-    Ok(())
 }
 
 fn check_argument_expansions(argument: &str) {

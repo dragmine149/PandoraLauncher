@@ -1,5 +1,5 @@
 use std::{
-    collections::{HashMap, HashSet}, io::Cursor, path::{Path, PathBuf}, sync::Arc, time::{Duration, SystemTime}
+    collections::HashMap, io::Cursor, path::{Path, PathBuf}, sync::Arc, time::{Duration, SystemTime}
 };
 
 use auth::{
@@ -9,7 +9,6 @@ use auth::{
     secret::{PlatformSecretStorage, SecretStorageError},
     serve_redirect::{self, ProcessAuthorizationError},
 };
-use base64::Engine;
 use bridge::{
     handle::{BackendHandle, BackendReceiver, FrontendHandle}, install::{ContentDownload, ContentInstall, ContentInstallFile, ContentInstallPath}, instance::{ContentType, InstanceContentSummary, InstanceID, InstanceServerSummary, InstanceWorldSummary}, message::{EmbeddedOrRaw, MessageToFrontend}, modal_action::{ModalAction, ModalActionVisitUrl, ProgressTracker, ProgressTrackerFinishType}, safe_path::SafePath
 };
@@ -19,10 +18,8 @@ use parking_lot::RwLock;
 use reqwest::{StatusCode, redirect::Policy};
 use rustc_hash::{FxHashMap, FxHashSet};
 use schema::{auxiliary::AuxiliaryContentMeta, backend_config::{BackendConfig, SyncTargets, ProxyConfig}, instance::InstanceConfiguration, loader::Loader, modrinth::ModrinthSideRequirement};
-use serde::Deserialize;
 use sha1::{Digest, Sha1};
 use tokio::sync::{mpsc::Receiver, OnceCell};
-use ustr::Ustr;
 use uuid::Uuid;
 
 use crate::{

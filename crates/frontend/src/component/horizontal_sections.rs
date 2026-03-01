@@ -1,4 +1,4 @@
-use gpui::{AnyElement, AvailableSpace, Bounds, ContentMask, DefiniteLength, Element, InteractiveElement, Interactivity, IntoElement, PaintQuad, ParentElement, Pixels, Point, Size, StyleRefinement, Styled, UniformList, px, size};
+use gpui::{AnyElement, AvailableSpace, Bounds, ContentMask, Element, InteractiveElement, Interactivity, IntoElement, ParentElement, Pixels, Point, Size, StyleRefinement, Styled, px, size};
 use gpui_component::ActiveTheme;
 
 pub struct HorizontalSections {

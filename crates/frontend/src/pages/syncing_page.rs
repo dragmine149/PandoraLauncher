@@ -1,15 +1,14 @@
 use std::{collections::HashSet, sync::Arc};
 
 use bridge::{handle::BackendHandle, message::{MessageToBackend, SyncState}, safe_path::SafePath};
-use enumset::EnumSet;
 use gpui::{prelude::*, *};
 use gpui_component::{
-    button::{Button, ButtonVariants}, checkbox::Checkbox, h_flex, input::{Input, InputState}, scroll::ScrollableElement, spinner::Spinner, tooltip::Tooltip, v_flex, ActiveTheme as _, Disableable, Icon, IconName, Sizable
+    button::{Button, ButtonVariants}, checkbox::Checkbox, h_flex, input::{Input, InputState}, spinner::Spinner, tooltip::Tooltip, v_flex, ActiveTheme as _, Disableable, Sizable
 };
 use once_cell::sync::Lazy;
 use rustc_hash::FxHashSet;
 
-use crate::{component::page::Page, entity::DataEntities, icon::PandoraIcon, ts, ui};
+use crate::{component::page::Page, entity::DataEntities, icon::PandoraIcon, ts};
 
 pub struct SyncingPage {
     backend_handle: BackendHandle,

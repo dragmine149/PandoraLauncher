@@ -7,7 +7,7 @@ use bridge::{
 };
 use gpui::{prelude::*, *};
 use gpui_component::{
-    ActiveTheme, Icon, IconName, IndexPath, Sizable, button::{Button, ButtonVariants}, h_flex, list::{ListDelegate, ListItem, ListState}, switch::Switch, v_flex
+    ActiveTheme, IndexPath, Sizable, button::{Button, ButtonVariants}, h_flex, list::{ListDelegate, ListItem, ListState}, switch::Switch, v_flex
 };
 use parking_lot::Mutex;
 use rustc_hash::FxHashSet;

@@ -1,4 +1,4 @@
-use std::{collections::{HashMap, HashSet}, path::Path, sync::Arc};
+use std::{path::Path, sync::Arc};
 
 use indexmap::IndexMap;
 use schema::{auxiliary::AuxDisabledChildren, content::ContentSource, loader::Loader, modification::ModrinthModpackFileDownload};

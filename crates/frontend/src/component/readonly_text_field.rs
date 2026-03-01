@@ -3,7 +3,7 @@ use std::{cell::RefCell, num::NonZeroUsize, ops::Range, rc::Rc, sync::Arc};
 use ftree::FenwickTree;
 use gpui::{prelude::*, *};
 use gpui_component::{
-    button::Button, h_flex, input::{Input, InputEvent, InputState}, scroll::{Scrollbar, ScrollbarHandle}, v_flex, ActiveTheme as _, Icon, IconName, Sizable
+    button::Button, h_flex, input::{Input, InputEvent, InputState}, scroll::{Scrollbar, ScrollbarHandle}, v_flex, ActiveTheme as _, Icon, Sizable
 };
 use lru::LruCache;
 use rustc_hash::FxBuildHasher;

@@ -1,17 +1,16 @@
-use std::{borrow::Cow, cmp::Ordering, path::Path, sync::Arc};
+use std::{path::Path, sync::Arc};
 
 use bridge::{
     handle::BackendHandle, instance::InstanceID, message::MessageToBackend, meta::MetadataRequest
 };
 use gpui::{prelude::*, *};
 use gpui_component::{
-    button::{Button, ButtonGroup, ButtonVariants}, checkbox::Checkbox, h_flex, input::{Input, InputEvent, InputState, NumberInput, NumberInputEvent}, notification::{Notification, NotificationType}, select::{SearchableVec, Select, SelectEvent, SelectState}, skeleton::Skeleton, spinner::Spinner, v_flex, ActiveTheme as _, Disableable, Selectable, Sizable, WindowExt
+    button::{Button, ButtonVariants}, checkbox::Checkbox, h_flex, input::{Input, InputEvent, InputState, NumberInput, NumberInputEvent}, notification::{Notification, NotificationType}, select::{SearchableVec, Select, SelectEvent, SelectState}, skeleton::Skeleton, v_flex, ActiveTheme as _, Disableable, Sizable, WindowExt
 };
-use once_cell::sync::Lazy;
 use schema::{fabric_loader_manifest::FabricLoaderManifest, forge::{ForgeMavenManifest, NeoforgeMavenManifest}, instance::{AUTO_LIBRARY_PATH_GLFW, AUTO_LIBRARY_PATH_OPENAL, InstanceJvmBinaryConfiguration, InstanceJvmFlagsConfiguration, InstanceLinuxWrapperConfiguration, InstanceMemoryConfiguration, InstanceSystemLibrariesConfiguration, InstanceWrapperCommandConfiguration, LwjglLibraryPath}, loader::Loader, version_manifest::MinecraftVersionManifest};
 use strum::IntoEnumIterator;
 
-use crate::{component::{horizontal_sections::HorizontalSections, path_label::PathLabel, responsive_grid::ResponsiveGrid}, entity::{DataEntities, instance::InstanceEntry, metadata::{AsMetadataResult, FrontendMetadata, FrontendMetadataResult, FrontendMetadataState, TypelessFrontendMetadataResult}}, icon::PandoraIcon, interface_config::InterfaceConfig, pages::instances_page::VersionList, ts};
+use crate::{component::{horizontal_sections::HorizontalSections, path_label::PathLabel}, entity::{DataEntities, instance::InstanceEntry, metadata::{AsMetadataResult, FrontendMetadata, FrontendMetadataResult, FrontendMetadataState, TypelessFrontendMetadataResult}}, icon::PandoraIcon, interface_config::InterfaceConfig, pages::instances_page::VersionList, ts};
 
 #[derive(PartialEq, Eq)]
 enum NewNameChangeState {

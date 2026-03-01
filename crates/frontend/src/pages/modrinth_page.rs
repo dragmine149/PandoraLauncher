@@ -1,9 +1,9 @@
 use std::{ops::Range, sync::{atomic::AtomicBool, Arc}, time::Duration};
 
-use bridge::{instance::{ContentUpdateStatus, InstanceContentID, InstanceContentSummary, InstanceID}, message::{AtomicBridgeDataLoadState, MessageToBackend}, meta::MetadataRequest, modal_action::ModalAction, serial::AtomicOptionSerial};
+use bridge::{instance::{ContentUpdateStatus, InstanceContentID, InstanceID}, message::{AtomicBridgeDataLoadState, MessageToBackend}, meta::MetadataRequest, modal_action::ModalAction, serial::AtomicOptionSerial};
 use gpui::{prelude::*, *};
 use gpui_component::{
-    ActiveTheme, Icon, IconName, Selectable, StyledExt, WindowExt, breadcrumb::Breadcrumb, button::{Button, ButtonGroup, ButtonVariant, ButtonVariants}, checkbox::Checkbox, h_flex, input::{Input, InputEvent, InputState}, label::Label, notification::NotificationType, scroll::{ScrollableElement, Scrollbar}, skeleton::Skeleton, tooltip::Tooltip, v_flex
+    ActiveTheme, Icon, Selectable, StyledExt, WindowExt, button::{Button, ButtonGroup, ButtonVariant, ButtonVariants}, checkbox::Checkbox, h_flex, input::{Input, InputEvent, InputState}, label::Label, notification::NotificationType, scroll::{ScrollableElement, Scrollbar}, skeleton::Skeleton, tooltip::Tooltip, v_flex
 };
 use rustc_hash::{FxHashMap, FxHashSet};
 use schema::{content::ContentSource, loader::Loader, modrinth::{
@@ -13,8 +13,8 @@ use ustr::Ustr;
 
 use crate::{
     component::{error_alert::ErrorAlert, page::Page, page_path::PagePath}, entity::{
-        DataEntities, instance::InstanceEntries, metadata::{AsMetadataResult, FrontendMetadata, FrontendMetadataResult}
-    }, icon::PandoraIcon, interface_config::InterfaceConfig, ts, ts_short, ui
+        DataEntities, metadata::{AsMetadataResult, FrontendMetadata, FrontendMetadataResult}
+    }, icon::PandoraIcon, interface_config::InterfaceConfig, ts, ts_short
 };
 
 pub struct ModrinthSearchPage {

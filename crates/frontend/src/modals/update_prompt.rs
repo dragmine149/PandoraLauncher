@@ -1,9 +1,8 @@
-use std::sync::{atomic::{AtomicBool, AtomicU8, Ordering}, Arc};
 
-use bridge::{handle::BackendHandle, instance::InstanceID, modal_action::ModalAction};
+use bridge::{handle::BackendHandle, modal_action::ModalAction};
 use gpui::{prelude::*, *};
 use gpui_component::{
-    Disableable, WindowExt, button::{Button, ButtonVariants}, h_flex, input::{Input, InputEvent, InputState}, v_flex
+    WindowExt, button::{Button, ButtonVariants}, h_flex, v_flex
 };
 use schema::pandora_update::UpdatePrompt;
 

@@ -1,5 +1,5 @@
 use std::{
-    borrow::Cow, cmp::Ordering, collections::{BTreeSet, HashMap, HashSet}, ffi::{OsStr, OsString}, fs::File, io::{BufRead, BufReader, Read, Write}, path::{Path, PathBuf}, process::{Child, Stdio}, sync::{Arc, OnceLock, atomic::AtomicBool}
+    borrow::Cow, cmp::Ordering, collections::{BTreeSet, HashMap, HashSet}, ffi::{OsStr, OsString}, fs::File, io::Write, path::{Path, PathBuf}, process::{Child, Stdio}, sync::{Arc, OnceLock, atomic::AtomicBool}
 };
 
 use bridge::{
@@ -222,7 +222,6 @@ impl Launcher {
             game_dir: dot_minecraft_path,
             configuration: instance_info,
             assets_root: self.directories.assets_root_dir.clone(),
-            temp_dir: self.directories.temp_dir.clone(),
             assets_index_name,
             classpath,
             log_configuration,
@@ -2061,7 +2060,6 @@ pub struct LaunchContext {
     pub game_dir: Arc<Path>,
     pub configuration: InstanceConfiguration,
     pub assets_root: Arc<Path>,
-    pub temp_dir: Arc<Path>,
     pub assets_index_name: String,
     pub classpath: Vec<OsString>,
     pub log_configuration: Option<OsString>,

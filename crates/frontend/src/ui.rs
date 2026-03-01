@@ -3,7 +3,7 @@ use std::sync::Arc;
 use bridge::{instance::InstanceID, message::MessageToBackend};
 use gpui::{prelude::*, *};
 use gpui_component::{
-    ActiveTheme as _, Disableable, Icon, IconName, IconNamed, WindowExt, button::{Button, ButtonVariants}, h_flex, input::{Input, InputState}, notification::{Notification, NotificationType}, resizable::{ResizablePanelEvent, ResizableState, h_resizable, resizable_panel}, scroll::ScrollableElement, sidebar::SidebarFooter, tooltip::Tooltip, v_flex
+    ActiveTheme as _, Disableable, Icon, WindowExt, button::{Button, ButtonVariants}, h_flex, input::{Input, InputState}, notification::{Notification, NotificationType}, resizable::{ResizablePanelEvent, ResizableState, h_resizable, resizable_panel}, scroll::ScrollableElement, sidebar::SidebarFooter, tooltip::Tooltip, v_flex
 };
 use rand::Rng;
 use schema::modrinth::ModrinthProjectType;
@@ -13,7 +13,7 @@ use uuid::Uuid;
 use crate::{
     component::{menu::{MenuGroup, MenuGroupItem}, page_path::PagePath}, entity::{
         DataEntities, instance::{InstanceAddedEvent, InstanceEntries, InstanceModifiedEvent, InstanceMovedToTopEvent, InstanceRemovedEvent}
-    }, icon::PandoraIcon, interface_config::InterfaceConfig, modals, pages::{import::ImportPage, instance::instance_page::{InstancePage, InstanceSubpageType}, instances_page::InstancesPage, modrinth_page::ModrinthSearchPage, syncing_page::SyncingPage}, png_render_cache, root, ts
+    }, icon::PandoraIcon, interface_config::InterfaceConfig, modals, pages::{import::ImportPage, instance::instance_page::{InstancePage, InstanceSubpageType}, instances_page::InstancesPage, modrinth_page::ModrinthSearchPage, syncing_page::SyncingPage}, png_render_cache, ts
 };
 
 pub struct LauncherUI {

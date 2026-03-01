@@ -1,14 +1,12 @@
 use std::{
-    collections::{BTreeMap, HashMap}, ffi::OsString, path::{Path, PathBuf}, sync::Arc
+    collections::BTreeMap, ffi::OsString, path::{Path, PathBuf}, sync::Arc
 };
 
-use enumset::EnumSet;
-use rustc_hash::FxHashMap;
 use schema::{
-    backend_config::{BackendConfig, ProxyConfig, SyncTargets}, instance::{
+    backend_config::{BackendConfig, ProxyConfig}, instance::{
         InstanceConfiguration, InstanceJvmBinaryConfiguration, InstanceJvmFlagsConfiguration,
         InstanceLinuxWrapperConfiguration, InstanceMemoryConfiguration, InstanceSystemLibrariesConfiguration, InstanceWrapperCommandConfiguration,
-    }, loader::Loader, pandora_update::{UpdateManifest, UpdateManifestExe, UpdatePrompt}
+    }, loader::Loader, pandora_update::UpdatePrompt
 };
 use ustr::Ustr;
 use uuid::Uuid;

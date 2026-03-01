@@ -1,14 +1,13 @@
 use std::sync::Arc;
 
-use bridge::{handle::BackendHandle, import::{ImportFromOtherLaunchers, OtherLauncher}, install::{ContentDownload, ContentInstall, ContentInstallFile, ContentInstallPath, InstallTarget}, message::{MessageToBackend, SyncState}, modal_action::ModalAction};
-use enumset::EnumSet;
+use bridge::{handle::BackendHandle, import::{ImportFromOtherLaunchers, OtherLauncher}, install::{ContentDownload, ContentInstall, ContentInstallFile, ContentInstallPath, InstallTarget}, message::MessageToBackend, modal_action::ModalAction};
 use gpui::{prelude::*, *};
 use gpui_component::{
-    button::{Button, ButtonVariants}, checkbox::Checkbox, h_flex, scroll::ScrollableElement, spinner::Spinner, tooltip::Tooltip, v_flex, ActiveTheme as _, Disableable, Icon, IconName, Sizable
+    button::{Button, ButtonVariants}, checkbox::Checkbox, scroll::ScrollableElement, spinner::Spinner, v_flex, ActiveTheme as _, Disableable, Sizable
 };
 use schema::{content::ContentSource, loader::Loader};
 
-use crate::{component::{page::Page, responsive_grid::ResponsiveGrid}, entity::DataEntities, icon::PandoraIcon, root, ui};
+use crate::{component::{page::Page, responsive_grid::ResponsiveGrid}, entity::DataEntities, root};
 
 pub struct ImportPage {
     backend_handle: BackendHandle,

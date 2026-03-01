@@ -10,7 +10,7 @@ use relative_path::RelativePath;
 use rustc_hash::{FxHashMap, FxHashSet};
 use schema::{
     content::ContentSource, loader::Loader, modrinth::{
-        ModrinthDependency, ModrinthDependencyType, ModrinthLoader, ModrinthProjectType, ModrinthProjectVersion, ModrinthProjectVersionsRequest, ModrinthProjectVersionsResult, ModrinthVersionStatus, ModrinthVersionType
+        ModrinthDependencyType, ModrinthLoader, ModrinthProjectType, ModrinthProjectVersion, ModrinthProjectVersionsRequest, ModrinthProjectVersionsResult, ModrinthVersionStatus, ModrinthVersionType
     }
 };
 

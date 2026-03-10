@@ -3,7 +3,7 @@ use std::sync::Arc;
 use bridge::{instance::InstanceID, message::MessageToBackend};
 use gpui::{prelude::*, *};
 use gpui_component::{
-    ActiveTheme as _, Disableable, Icon, InteractiveElementExt, WindowExt, button::{Button, ButtonVariants}, h_flex, input::{Input, InputState}, notification::{Notification, NotificationType}, resizable::{ResizablePanelEvent, ResizableState, h_resizable, resizable_panel}, scroll::ScrollableElement, sidebar::SidebarFooter, tooltip::Tooltip, v_flex
+    ActiveTheme as _, Disableable, Icon, InteractiveElementExt, WindowExt, button::{Button, ButtonVariants}, h_flex, input::{Input, InputState}, notification::{Notification, NotificationType}, resizable::{ResizablePanelEvent, ResizableState, h_resizable, resizable_panel}, scroll::ScrollableElement, tooltip::Tooltip, v_flex
 };
 use rand::Rng;
 use rustc_hash::FxHashMap;
@@ -11,7 +11,7 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::{
-    component::{menu::{MenuGroup, MenuGroupItem}, page_path::PagePath, title_bar::TitleBar}, entity::{
+    component::{menu::{MenuGroup, MenuGroupItem}, page_path::PagePath, shrinking_text::ShrinkingText, title_bar::TitleBar}, entity::{
         DataEntities, instance::{InstanceAddedEvent, InstanceEntries, InstanceModifiedEvent, InstanceMovedToTopEvent, InstanceRemovedEvent}
     }, icon::PandoraIcon, interface_config::InterfaceConfig, modals, pages::{import::ImportPage, instance::instance_page::InstancePage, instances_page::InstancesPage, modrinth_page::ModrinthSearchPage, modrinth_project_page::ModrinthProjectPage, page::Page, skins_page::SkinsPage, syncing_page::SyncingPage}, png_render_cache, ts
 };
@@ -383,13 +383,22 @@ impl Render for LauncherUI {
             )
         };
 
-        let account_button = div().max_w_full().flex_grow().id("account-button").child(SidebarFooter::new()
-            .w_full()
+        let account_button = h_flex()
+            .id("account-button")
+            .flex_1()
+            .p_2()
+            .max_w_full()
+            .gap_2()
             .justify_center()
             .text_size(rems(0.9375))
             .line_height(rems(1.0))
+            .rounded(cx.theme().radius)
+            .hover(|this| {
+                this.bg(cx.theme().sidebar_accent)
+                    .text_color(cx.theme().sidebar_accent_foreground)
+            })
             .child(account_head.size_8().min_w_8().min_h_8())
-            .child(v_flex().w_full().child(account_name)))
+            .child(ShrinkingText::new(account_name))
             .on_click({
                 let accounts = self.data.accounts.clone();
                 let backend_handle = self.data.backend_handle.clone();
@@ -567,7 +576,7 @@ impl Render for LauncherUI {
             .child(Icon::new(PandoraIcon::Pandora).size_8().min_w_8().min_h_8())
             .child(ts!("common.app_name"));
         let footer_buttons = h_flex().child(settings_button).child(bug_report_button);
-        let footer = v_flex().pb_3().px_3().items_center().w_full().child(footer_buttons).child(account_button);
+        let footer = v_flex().pb_2().px_2().items_center().w_full().child(footer_buttons).child(account_button);
         let sidebar = v_flex()
             .w_full()
             .bg(cx.theme().sidebar)

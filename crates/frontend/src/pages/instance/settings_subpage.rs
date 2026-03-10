@@ -10,7 +10,7 @@ use gpui_component::{
 use schema::{fabric_loader_manifest::FabricLoaderManifest, forge::{ForgeMavenManifest, NeoforgeMavenManifest}, instance::{AUTO_LIBRARY_PATH_GLFW, AUTO_LIBRARY_PATH_OPENAL, InstanceJvmBinaryConfiguration, InstanceJvmFlagsConfiguration, InstanceLinuxWrapperConfiguration, InstanceMemoryConfiguration, InstanceSystemLibrariesConfiguration, InstanceWrapperCommandConfiguration, LwjglLibraryPath}, loader::Loader, version_manifest::MinecraftVersionManifest};
 use strum::IntoEnumIterator;
 
-use crate::{component::{horizontal_sections::HorizontalSections, path_label::PathLabel}, entity::{DataEntities, instance::InstanceEntry, metadata::{AsMetadataResult, FrontendMetadata, FrontendMetadataResult, FrontendMetadataState, TypelessFrontendMetadataResult}}, icon::PandoraIcon, interface_config::InterfaceConfig, pages::instances_page::VersionList, ts};
+use crate::{component::{horizontal_sections::HorizontalSections, path_label::PathLabel}, entity::{DataEntities, instance::InstanceEntry, metadata::{AsMetadataResult, FrontendMetadata, FrontendMetadataResult, FrontendMetadataState, TypelessFrontendMetadataResult}}, interface_config::InterfaceConfig, pages::instances_page::VersionList, ts};
 
 #[derive(PartialEq, Eq)]
 enum NewNameChangeState {

@@ -11,7 +11,7 @@ use gpui_component::{
 };
 use parking_lot::Mutex;
 use rustc_hash::FxHashSet;
-use schema::loader::Loader;
+use schema::{loader::Loader, text_component::FlatTextComponent};
 use ustr::Ustr;
 
 use crate::{icon::PandoraIcon, interface_config::InterfaceConfig, png_render_cache, ts};
@@ -78,6 +78,7 @@ impl ContentListDelegate {
 
         let (desc1, desc2) = create_descriptions(summary.content_summary.name.clone(),
             summary.content_summary.version_str.clone(), summary.content_summary.authors.clone(),
+            summary.content_summary.rich_description.clone(),
             summary.filename.clone(), cx.theme().muted_foreground);
 
         let id = self.id;
@@ -357,7 +358,7 @@ impl ContentListDelegate {
         };
 
         let (desc1, desc2) = create_descriptions(summary.name.clone(),
-            summary.version_str.clone(), summary.authors.clone(),
+            summary.version_str.clone(), summary.authors.clone(), summary.rich_description.clone(),
             child.path.clone(), cx.theme().muted_foreground);
 
         let mut hasher = DefaultHasher::new();
@@ -412,8 +413,9 @@ impl ContentListDelegate {
             id: None,
             hash: [0_u8; 20],
             name: None,
-            version_str: "unknown".into(),
             authors: "".into(),
+            version_str: "unknown".into(),
+            rich_description: None,
             png_icon: None,
             extra: ContentType::Fabric,
         });
@@ -605,8 +607,59 @@ impl ListDelegate for ContentListDelegate {
     }
 }
 
-fn create_descriptions(name: Option<Arc<str>>, version: Arc<str>, authors: Arc<str>, filename: Arc<str>, secondary: Hsla) -> (Div, Option<Div>) {
+fn create_descriptions(name: Option<Arc<str>>, version: Arc<str>, authors: Arc<str>, rich_description: Option<Arc<FlatTextComponent>>, filename: Arc<str>, secondary: Hsla) -> (Div, Option<Div>) {
     if name.is_none() && authors.is_empty() {
+        if let Some(rich_description) = rich_description {
+            let styled_text = StyledText::new(&rich_description.content)
+                .with_highlights(rich_description.runs.iter().map(|run| {
+                    (
+                        run.range.clone(),
+                        HighlightStyle {
+                            color: run.style.colour.map(|rgb| gpui::rgb(rgb).into()),
+                            font_weight: run.style.bold.map(|bold| {
+                                if bold {
+                                    FontWeight::BOLD
+                                } else {
+                                    FontWeight::NORMAL
+                                }
+                            }),
+                            font_style: run.style.italic.map(|italic| {
+                                if italic {
+                                    FontStyle::Normal
+                                } else {
+                                    FontStyle::Italic
+                                }
+                            }),
+                            background_color: None,
+                            underline: run.style.underlined.map(|underline| {
+                                if underline {
+                                    UnderlineStyle::default()
+                                } else {
+                                    UnderlineStyle { thickness: px(1.0), ..Default::default() }
+                                }
+                            }),
+                            strikethrough: run.style.strikethrough.map(|strikethrough| {
+                                if strikethrough {
+                                    StrikethroughStyle::default()
+                                } else {
+                                    StrikethroughStyle { thickness: px(1.0), ..Default::default() }
+                                }
+                            }),
+                            fade_out: None,
+                        }
+                    )
+                }));
+
+            let description1 = v_flex()
+                .w_2_5()
+                .gap_2()
+                .text_ellipsis()
+                .line_height(relative(1.0))
+                .child(SharedString::from(filename))
+                .child(styled_text);
+            return (description1, None);
+        }
+
         let description1 = v_flex()
             .w_2_5()
             .text_ellipsis()

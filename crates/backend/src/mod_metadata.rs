@@ -236,6 +236,7 @@ impl ModMetadataManager {
             name: Some(name),
             authors,
             version_str: format!("v{}", fabric_mod_json.version).into(),
+            rich_description: None,
             png_icon,
             extra: ContentType::Fabric
         }))
@@ -287,6 +288,7 @@ impl ModMetadataManager {
             name: Some(name),
             authors,
             version_str: version.into(),
+            rich_description: None,
             png_icon,
             extra,
         }))
@@ -336,6 +338,7 @@ impl ModMetadataManager {
             name: Some(first.name.clone()),
             authors: authors.into(),
             version_str: version.into(),
+            rich_description: None,
             png_icon,
             extra: ContentType::LegacyForge,
         }))
@@ -433,6 +436,7 @@ impl ModMetadataManager {
             name: Some(modrinth_index_json.name),
             authors,
             version_str: format!("v{}", modrinth_index_json.version_id).into(),
+            rich_description: None,
             png_icon,
             extra: ContentType::ModrinthModpack {
                 downloads: modrinth_index_json.files,
@@ -506,6 +510,7 @@ impl ModMetadataManager {
             name: Some(name.clone()),
             authors: author.unwrap_or_default(),
             version_str: version.unwrap_or_default(),
+            rich_description: None,
             png_icon: None,
             extra: ContentType::JavaModule
         }))
@@ -530,7 +535,8 @@ impl ModMetadataManager {
             hash,
             name: None,
             authors: "".into(),
-            version_str: pack_mcmeta.pack.description,
+            version_str: "".into(),
+            rich_description: Some(Arc::new(pack_mcmeta.pack.description)),
             png_icon,
             extra: ContentType::ResourcePack
         }))

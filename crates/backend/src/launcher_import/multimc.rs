@@ -46,7 +46,7 @@ pub fn try_load_from_multimc(instance_cfg: &Path, mmc_pack: &Path) -> Option<Ins
 
     let mut override_native_workarounds = false;
     let mut override_performance = false;
-    let mut override_account = (false, Uuid::default());
+    let mut override_account = (false, None);
 
     let mut section = None;
     for line in instance_cfg_str.split(|v| v == '\n') {
@@ -179,10 +179,7 @@ pub fn try_load_from_multimc(instance_cfg: &Path, mmc_pack: &Path) -> Option<Ins
                     	override_account.0 = enabled;
                     },
                     (Some("[General]"), "InstanceAccountId") => {
-                    	let Ok(value) = value.parse::<Uuid>() else {
-                     		continue;
-                     	};
-                     	override_account.1 = value;
+                    	override_account.1 = value.parse::<Uuid>().ok();
                     }
                     _ => {}
                 }
@@ -198,7 +195,7 @@ pub fn try_load_from_multimc(instance_cfg: &Path, mmc_pack: &Path) -> Option<Ins
     }
 
     if override_account.0 {
-   		configuration.preferred_account = Some(override_account.1);
+   		configuration.preferred_account = override_account.1;
     }
 
     Some(configuration)

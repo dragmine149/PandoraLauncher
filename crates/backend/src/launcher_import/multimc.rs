@@ -46,6 +46,7 @@ pub fn try_load_from_multimc(instance_cfg: &Path, mmc_pack: &Path) -> Option<Ins
 
     let mut override_native_workarounds = false;
     let mut override_performance = false;
+    let mut override_account = (false, Uuid::default());
 
     let mut section = None;
     for line in instance_cfg_str.split(|v| v == '\n') {
@@ -171,6 +172,18 @@ pub fn try_load_from_multimc(instance_cfg: &Path, mmc_pack: &Path) -> Option<Ins
                         };
                         configuration.linux_wrapper.get_or_insert_default().use_discrete_gpu = enabled;
                     },
+                    (Some("[General]"), "UseAccountForInstance") => {
+                    	let Ok(enabled) = value.parse::<bool>() else {
+                     		continue;
+                     	};
+                    	override_account.0 = enabled;
+                    },
+                    (Some("[General]"), "InstanceAccountId") => {
+                    	let Ok(value) = value.parse::<Uuid>() else {
+                     		continue;
+                     	};
+                     	override_account.1 = value;
+                    }
                     _ => {}
                 }
             }
@@ -182,6 +195,10 @@ pub fn try_load_from_multimc(instance_cfg: &Path, mmc_pack: &Path) -> Option<Ins
     }
     if !override_performance {
         configuration.linux_wrapper = None;
+    }
+
+    if override_account.0 {
+   		configuration.preferred_account = Some(override_account.1);
     }
 
     Some(configuration)

@@ -60,7 +60,7 @@ struct Launcher {
     wrapper_command: Option<String>,
     // use_system_glfw: Option<bool>,
     // use_system_open_al: Option<bool>,
-
+    account: Option<Uuid>,
     // quick_play: QuickPlay,
     // is_dev: bool,
     // is_playable: bool,
@@ -353,8 +353,8 @@ struct AtLauncherInstanceToImport {
 
 fn try_load_from_atlauncher(config_path: &Path, launcher_config: &AtLauncherConfig) -> anyhow::Result<InstanceConfiguration> {
     // let instance_cfg_bytes = std::fs::read(config_path)?;
-     // let instance_cfg = serde_json::from_slice::<AtLauncherInstance>(&instance_cfg_bytes)?;
-     let instance_cfg_bytes = std::fs::read(config_path).expect("Failed to read from fs");
+    // let instance_cfg = serde_json::from_slice::<AtLauncherInstance>(&instance_cfg_bytes)?;
+    let instance_cfg_bytes = std::fs::read(config_path).expect("Failed to read from fs");
     let instance_cfg = serde_json::from_slice::<AtLauncherInstance>(&instance_cfg_bytes).expect("Failed to convert to json");
 
     // tbh, idk why they have it as `id` they just do...
@@ -379,6 +379,7 @@ fn try_load_from_atlauncher(config_path: &Path, launcher_config: &AtLauncherConf
     }
 
     configuration.preferred_loader_version = instance_cfg.launcher.loader_version.map(|loader_version| loader_version.raw_version.into());
+    configuration.preferred_account = instance_cfg.launcher.account;
 
     Ok(configuration)
 }
@@ -439,8 +440,8 @@ fn import_instances_from_atlauncher(backend: &BackendState, path: &Path, launche
         let Ok(configuration) = try_load_from_atlauncher(&to_import.config_path, launcher_config) else {
             tracker.set_finished(bridge::modal_action::ProgressTrackerFinishType::Error);
             log::error!("Failed to load config path from atlauncher for {:?}", to_import.folder.file_name().unwrap());
-             tracker.notify();
-              continue;
+            tracker.notify();
+            continue;
         };
 
         let Ok(configuration_bytes) = serde_json::to_vec(&configuration) else {

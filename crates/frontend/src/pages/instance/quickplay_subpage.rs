@@ -8,11 +8,7 @@ use bridge::{
 };
 use gpui::{prelude::*, *};
 use gpui_component::{
-    ActiveTheme as _, IndexPath,
-    button::{Button, ButtonVariants},
-    h_flex,
-    list::{ListDelegate, ListItem, ListState},
-    v_flex,
+    ActiveTheme as _, IndexPath, Theme, button::{Button, ButtonVariants}, h_flex, list::{ListDelegate, ListItem, ListState}, v_flex
 };
 
 use crate::{
@@ -146,14 +142,12 @@ impl Render for InstanceQuickplaySubpage {
                     .child(card(
                         ts!("instance.current_session"),
                         current_session.into(),
-                        theme.border,
-                        theme.radius,
+                        theme,
                     ))
                     .child(card(
                         ts!("instance.total_playtime"),
                         total_playtime,
-                        theme.border,
-                        theme.radius,
+                        theme,
                     )),
             )
             .child(
@@ -186,16 +180,16 @@ impl Render for InstanceQuickplaySubpage {
     }
 }
 
-fn card(label: impl Into<SharedString>, value: SharedString, border: Hsla, radius: Pixels) -> Div {
+fn card(label: impl Into<SharedString>, value: SharedString, theme: &Theme) -> Div {
     v_flex()
         .gap_1()
         .px_3()
         .py_2()
         .min_w_40()
         .border_1()
-        .border_color(border)
-        .rounded(radius)
-        .child(div().text_sm().opacity(0.6).child(label.into()))
+        .border_color(theme.border)
+        .rounded(theme.radius)
+        .child(div().text_sm().text_color(theme.muted_foreground).child(label.into()))
         .child(div().text_lg().child(value))
 }
 

@@ -425,18 +425,19 @@ impl BackendState {
 
         let mut instance_state = self.instance_state.write();
         for instance in instance_state.instances.iter_mut() {
-            let was_running = !instance.processes.is_empty();
+            let mut killed = false;
             instance.processes.retain_mut(|child| {
                 if matches!(child.try_wait(), Ok(None)) {
                     true
                 } else {
                     log::debug!("Child process {} is no longer alive", child.id());
+                    killed = true;
                     false
                 }
             });
 
-            if was_running && instance.processes.is_empty() {
-                instance.finish_session();
+            if killed {
+                instance.update_session();
                 self.send.send(instance.create_modify_message());
             } else if instance.has_active_session() {
                 self.send.send(MessageToFrontend::InstancePlaytimeUpdated {

@@ -810,33 +810,36 @@ impl Instance {
         self.configuration = new.configuration;
     }
 
-    pub fn begin_session(&mut self) {
-        if self.session_started_at.is_some() {
-            return;
+    pub fn update_session(&mut self) {
+        let running = !self.processes.is_empty();
+        if running {
+            if self.session_started_at.is_some() {
+                return;
+            }
+
+            self.session_started_at = Some(Instant::now());
+            let now = unix_time_ms_now();
+            self.stats.modify(|stats| {
+                stats.session_count = stats.session_count.saturating_add(1);
+                stats.last_played_unix_ms = now;
+            });
+        } else {
+            let Some(started_at) = self.session_started_at.take() else {
+                return;
+            };
+
+            let elapsed = started_at.elapsed().as_secs();
+            self.stats.modify(|stats| {
+                stats.total_playtime_secs = stats.total_playtime_secs.saturating_add(elapsed);
+            });
         }
-
-        self.session_started_at = Some(Instant::now());
-        let now = unix_time_ms_now();
-        self.stats.modify(|stats| {
-            stats.session_count = stats.session_count.saturating_add(1);
-            stats.last_played_unix_ms = now;
-        });
-    }
-
-    pub fn finish_session(&mut self) {
-        let Some(started_at) = self.session_started_at.take() else {
-            return;
-        };
-
-        let elapsed = started_at.elapsed().as_secs();
-        self.stats.modify(|stats| {
-            stats.total_playtime_secs = stats.total_playtime_secs.saturating_add(elapsed);
-        });
     }
 
     pub fn playtime(&mut self) -> InstancePlaytime {
         let stats = self.stats.get().clone();
-        let current_session_secs = self.current_session_secs();
+        let current_session_secs = self.session_started_at
+            .map(|started_at| started_at.elapsed().as_secs())
+            .unwrap_or(0);
 
         InstancePlaytime {
             total_secs: stats.total_playtime_secs.saturating_add(current_session_secs),
@@ -847,12 +850,6 @@ impl Instance {
 
     pub fn has_active_session(&self) -> bool {
         self.session_started_at.is_some()
-    }
-
-    fn current_session_secs(&self) -> u64 {
-        self.session_started_at
-            .map(|started_at| started_at.elapsed().as_secs())
-            .unwrap_or(0)
     }
 
     pub fn status(&self) -> InstanceStatus {
